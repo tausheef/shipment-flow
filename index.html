@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AeroTrek — How Shipping Works</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: #f8fafc;
+      color: #1e293b;
+      min-height: 100vh;
+      padding: 48px 24px;
+    }
+
+    /* ── HEADER ── */
+    header {
+      text-align: center;
+      margin-bottom: 64px;
+    }
+
+    .logo-pill {
+      display: inline-block;
+      background: #0f172a;
+      color: #38bdf8;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 6px 18px;
+      border-radius: 999px;
+      margin-bottom: 18px;
+    }
+
+    header h1 {
+      font-size: 36px;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 10px;
+      letter-spacing: -0.5px;
+    }
+
+    header p {
+      font-size: 16px;
+      color: #64748b;
+      max-width: 500px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* ── SECTION TITLE ── */
+    .section-title {
+      text-align: center;
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: #94a3b8;
+      margin-bottom: 32px;
+    }
+
+    /* ══════════════════════════════
+       STEP-BY-STEP FLOW
+    ══════════════════════════════ */
+    .flow-section {
+      max-width: 900px;
+      margin: 0 auto 80px;
+    }
+
+    .steps {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .step {
+      display: flex;
+      align-items: flex-start;
+      gap: 24px;
+      position: relative;
+    }
+
+    .step:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      left: 27px;
+      top: 64px;
+      width: 2px;
+      height: calc(100% - 20px);
+      background: #e2e8f0;
+    }
+
+    .step-left {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex-shrink: 0;
+      padding-top: 8px;
+    }
+
+    .step-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      flex-shrink: 0;
+      position: relative;
+      z-index: 1;
+    }
+
+    .step-body {
+      background: #fff;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 22px 26px;
+      flex: 1;
+      margin-bottom: 24px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    }
+
+    .step-body h3 {
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .step-body p {
+      font-size: 14px;
+      color: #475569;
+      line-height: 1.65;
+      margin-bottom: 12px;
+    }
+
+    .step-body p:last-child { margin-bottom: 0; }
+
+    .pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 10px;
+    }
+
+    .pill {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .pill-blue   { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
+    .pill-green  { background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; }
+    .pill-purple { background: #faf5ff; color: #7c3aed; border: 1px solid #ddd6fe; }
+    .pill-amber  { background: #fffbeb; color: #b45309; border: 1px solid #fde68a; }
+    .pill-red    { background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; }
+    .pill-slate  { background: #f8fafc; color: #475569; border: 1px solid #e2e8f0; }
+
+    /* color themes per step */
+    .icon-blue   { background: #dbeafe; color: #1d4ed8; }
+    .icon-purple { background: #ede9fe; color: #6d28d9; }
+    .icon-green  { background: #dcfce7; color: #15803d; }
+    .icon-amber  { background: #fef9c3; color: #b45309; }
+    .icon-red    { background: #fee2e2; color: #b91c1c; }
+    .icon-teal   { background: #ccfbf1; color: #0f766e; }
+
+    .border-blue   { border-color: #bfdbfe; }
+    .border-purple { border-color: #ddd6fe; }
+    .border-green  { border-color: #bbf7d0; }
+    .border-amber  { border-color: #fde68a; }
+    .border-red    { border-color: #fecaca; }
+    .border-teal   { border-color: #99f6e4; }
+
+    .title-blue   { color: #1e40af; }
+    .title-purple { color: #5b21b6; }
+    .title-green  { color: #15803d; }
+    .title-amber  { color: #92400e; }
+    .title-red    { color: #991b1b; }
+    .title-teal   { color: #0f766e; }
+
+    /* ── FAIL CALLOUT inside a step ── */
+    .callout {
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-size: 13px;
+      margin-top: 12px;
+      line-height: 1.6;
+    }
+
+    .callout-red    { background: #fef2f2; border-left: 3px solid #ef4444; color: #7f1d1d; }
+    .callout-green  { background: #f0fdf4; border-left: 3px solid #22c55e; color: #14532d; }
+    .callout-blue   { background: #eff6ff; border-left: 3px solid #3b82f6; color: #1e3a8a; }
+    .callout-amber  { background: #fffbeb; border-left: 3px solid #f59e0b; color: #78350f; }
+
+    /* ══════════════════════════════
+       VENN DIAGRAM
+    ══════════════════════════════ */
+    .venn-section {
+      max-width: 900px;
+      margin: 0 auto 80px;
+    }
+
+    .venn-card {
+      background: #fff;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 20px;
+      padding: 40px 32px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    }
+
+    .venn-svg-wrap {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 32px;
+    }
+
+    .venn-legend {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .vl-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: #475569;
+      font-weight: 500;
+    }
+
+    .vl-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* ══════════════════════════════
+       FAILURE TABLE
+    ══════════════════════════════ */
+    .table-section {
+      max-width: 900px;
+      margin: 0 auto 80px;
+    }
+
+    .fail-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1.5px solid #e2e8f0;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    }
+
+    .fail-table th {
+      background: #f8fafc;
+      padding: 14px 20px;
+      text-align: left;
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #64748b;
+      border-bottom: 1.5px solid #e2e8f0;
+    }
+
+    .fail-table td {
+      padding: 16px 20px;
+      font-size: 14px;
+      color: #334155;
+      border-bottom: 1px solid #f1f5f9;
+      vertical-align: top;
+      line-height: 1.5;
+    }
+
+    .fail-table tr:last-child td { border-bottom: none; }
+
+    .status-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-right: 6px;
+      vertical-align: middle;
+    }
+    .sd-red    { background: #ef4444; }
+    .sd-orange { background: #f97316; }
+    .sd-green  { background: #22c55e; }
+
+    /* ══════════════════════════════
+       SHIPROCKET NOTE
+    ══════════════════════════════ */
+    .note-banner {
+      max-width: 900px;
+      margin: 0 auto 60px;
+      background: #fffbeb;
+      border: 1.5px solid #fcd34d;
+      border-radius: 16px;
+      padding: 24px 28px;
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .note-icon {
+      font-size: 28px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .note-body h3 {
+      font-size: 15px;
+      font-weight: 700;
+      color: #92400e;
+      margin-bottom: 8px;
+    }
+
+    .note-body p {
+      font-size: 14px;
+      color: #78350f;
+      line-height: 1.7;
+    }
+
+    .note-body ul {
+      margin-top: 10px;
+      padding-left: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .note-body li {
+      font-size: 13.5px;
+      color: #78350f;
+      line-height: 1.6;
+    }
+
+    /* ══════════════════════════════
+       FOOTER
+    ══════════════════════════════ */
+    footer {
+      text-align: center;
+      font-size: 12px;
+      color: #94a3b8;
+      padding-top: 16px;
+      border-top: 1px solid #e2e8f0;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    @media (max-width: 600px) {
+      header h1 { font-size: 26px; }
+      .step { gap: 14px; }
+      .step-body { padding: 16px; }
+      .venn-card { padding: 20px 12px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<header>
+  <div class="logo-pill">AeroTrek Logistics</div>
+  <h1>How Your Shipment Gets Booked</h1>
+  <p>A simple guide to how pricing, booking, and payment work together on the platform.</p>
+</header>
+
+
+<!-- ════════════════════════════════════════
+     SECTION 1 — STEP BY STEP FLOW
+════════════════════════════════════════ -->
+<div class="flow-section">
+  <div class="section-title">Step-by-Step Journey</div>
+
+  <div class="steps">
+
+    <!-- STEP 1 -->
+    <div class="step">
+      <div class="step-left">
+        <div class="step-icon icon-blue">📦</div>
+      </div>
+      <div class="step-body border-blue">
+        <h3 class="title-blue">Step 1 — Enter Shipment Details</h3>
+        <p>The user fills in basic information about the package they want to ship — where it's going, how heavy it is, and what's inside.</p>
+        <div class="pills">
+          <span class="pill pill-slate">Destination Country</span>
+          <span class="pill pill-slate">Package Weight (kg)</span>
+          <span class="pill pill-slate">Dimensions (L × W × H)</span>
+          <span class="pill pill-slate">Document or Parcel?</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="step">
+      <div class="step-left">
+        <div class="step-icon icon-purple">💰</div>
+      </div>
+      <div class="step-body border-purple">
+        <h3 class="title-purple">Step 2 — System Calculates Shipping Price</h3>
+        <p>AeroTrek automatically computes the best price from multiple courier companies and shows all available options sorted from cheapest to most expensive.</p>
+        <div class="callout callout-blue">
+          <strong>How the price is calculated:</strong><br/>
+          If a box is 30×20×10 cm, the system calculates its "size weight" as 30×20×10 ÷ 5000 = 1.2 kg.
+          It then compares this with the actual weight and uses whichever is <strong>higher</strong> — this is the billable weight.
+        </div>
+        <div class="pills" style="margin-top:12px;">
+          <span class="pill pill-blue">DHL</span>
+          <span class="pill pill-purple">FedEx</span>
+          <span class="pill pill-green">Aramex</span>
+          <span class="pill pill-amber">UPS</span>
+          <span class="pill pill-slate">+ 6 more carriers</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="step">
+      <div class="step-left">
+        <div class="step-icon icon-amber">👆</div>
+      </div>
+      <div class="step-body border-amber">
+        <h3 class="title-amber">Step 3 — User Selects a Carrier & Confirms</h3>
+        <p>The user reviews the list of available carriers with their prices and delivery times, then picks one and clicks "Book".</p>
+        <div class="callout callout-amber">
+          <strong>Nothing is charged yet.</strong> Viewing prices is always free. The wallet is only touched when the user actually confirms the booking.
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="step">
+      <div class="step-left">
+        <div class="step-icon icon-red">🔒</div>
+      </div>
+      <div class="step-body border-red">
+        <h3 class="title-red">Step 4 — System Runs 3 Safety Checks</h3>
+        <p>Before anything is booked or charged, the system automatically verifies three things:</p>
+        <div class="callout callout-red" style="margin-top:10px;">
+          <strong>Check 1 — Is the user logged in?</strong><br/>
+          The system confirms the user's session is active and valid.
+        </div>
+        <div class="callout callout-red" style="margin-top:8px;">
+          <strong>Check 2 — Is KYC verified?</strong><br/>
+          International shipping requires identity verification (Aadhaar / PAN / GST). If not done, booking is blocked.
+        </div>
+        <div class="callout callout-red" style="margin-top:8px;">
+          <strong>Check 3 — Does the wallet have enough balance?</strong><br/>
+          If the shipping price is ₹2,000 but the wallet has ₹800, the booking is rejected immediately with a message to recharge.
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 5 -->
+    <div class="step">
+      <div class="step-left">
+        <div class="step-icon icon-teal">🚀</div>
+      </div>
+      <div class="step-body border-teal">
+        <h3 class="title-teal">Step 5 — Shipment is Created with Courier</h3>
+        <p>All three checks pass. AeroTrek sends the shipment details to the courier company's system (DHL, FedEx, etc.) and gets back a tracking number and shipping label.</p>
+        <div class="pills">
+          <span class="pill pill-green">AWB Number (tracking)</span>
+          <span class="pill pill-green">Shipping Label (PDF)</span>
+          <span class="pill pill-green">AeroTrek Booking ID</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 6 -->
+    <div class="step">
+      <div class="step-left">
+        <div class="step-icon icon-green">✅</div>
+      </div>
+      <div class="step-body border-green">
+        <h3 class="title-green">Step 6 — Wallet is Deducted</h3>
+        <p>Only after the courier confirms the booking successfully, the exact shipping price is deducted from the user's AeroTrek wallet. The transaction is saved and linked to the shipment permanently.</p>
+        <div class="callout callout-green">
+          <strong>Important:</strong> If the courier fails to create the shipment (e.g. a network error), the wallet is <strong>NOT deducted</strong>. Money is only taken when the booking is 100% confirmed.
+        </div>
+        <div class="pills" style="margin-top:12px;">
+          <span class="pill pill-green">Wallet balance updated instantly</span>
+          <span class="pill pill-green">Transaction record saved</span>
+          <span class="pill pill-green">Booking complete</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════
+     SECTION 2 — VENN DIAGRAM
+════════════════════════════════════════ -->
+<div class="venn-section">
+  <div class="section-title">What Each Part Does &amp; Where They Connect</div>
+  <div class="venn-card">
+    <div class="venn-svg-wrap">
+      <svg viewBox="0 0 760 440" width="760" height="440" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;">
+
+        <!-- Circle fills -->
+        <circle cx="250" cy="190" r="170" fill="#eff6ff" stroke="#93c5fd" stroke-width="2.5"/>
+        <circle cx="510" cy="190" r="170" fill="#faf5ff" stroke="#c4b5fd" stroke-width="2.5"/>
+        <circle cx="380" cy="350" r="170" fill="#f0fdf4" stroke="#86efac" stroke-width="2.5"/>
+
+        <!-- Overlap shading — Rate ∩ Booking -->
+        <clipPath id="cr"><circle cx="250" cy="190" r="170"/></clipPath>
+        <circle cx="510" cy="190" r="170" fill="#e0e7ff" opacity="0.55" clip-path="url(#cr)"/>
+
+        <!-- Overlap shading — Booking ∩ Wallet -->
+        <clipPath id="cb"><circle cx="510" cy="190" r="170"/></clipPath>
+        <circle cx="380" cy="350" r="170" fill="#d1fae5" opacity="0.55" clip-path="url(#cb)"/>
+
+        <!-- Center shading -->
+        <clipPath id="cw"><circle cx="380" cy="350" r="170"/></clipPath>
+        <circle cx="510" cy="190" r="170" fill="#fef9c3" opacity="0.5" clip-path="url(#cr)"/>
+        <circle cx="380" cy="350" r="170" fill="#fef9c3" opacity="0.5" clip-path="url(#cr)"/>
+
+        <!-- ── RATE CALC label ── -->
+        <text x="170" y="145" text-anchor="middle" font-size="18" font-weight="800" fill="#1d4ed8">Price</text>
+        <text x="170" y="167" text-anchor="middle" font-size="18" font-weight="800" fill="#1d4ed8">Calculator</text>
+
+        <text x="168" y="195" text-anchor="middle" font-size="12" fill="#3b82f6">Checks all couriers</text>
+        <text x="168" y="212" text-anchor="middle" font-size="12" fill="#3b82f6">Finds best price</text>
+        <text x="168" y="229" text-anchor="middle" font-size="12" fill="#3b82f6">Sorts cheapest first</text>
+        <text x="168" y="246" text-anchor="middle" font-size="12" fill="#3b82f6">No charge at this stage</text>
+
+        <!-- ── BOOKING label ── -->
+        <text x="594" y="145" text-anchor="middle" font-size="18" font-weight="800" fill="#5b21b6">Shipment</text>
+        <text x="594" y="167" text-anchor="middle" font-size="18" font-weight="800" fill="#5b21b6">Booking</text>
+
+        <text x="594" y="195" text-anchor="middle" font-size="12" fill="#7c3aed">Verifies identity (KYC)</text>
+        <text x="594" y="212" text-anchor="middle" font-size="12" fill="#7c3aed">Contacts courier API</text>
+        <text x="594" y="229" text-anchor="middle" font-size="12" fill="#7c3aed">Gets tracking number</text>
+        <text x="594" y="246" text-anchor="middle" font-size="12" fill="#7c3aed">Generates label PDF</text>
+
+        <!-- ── WALLET label ── -->
+        <text x="380" y="400" text-anchor="middle" font-size="18" font-weight="800" fill="#15803d">Wallet</text>
+        <text x="380" y="420" text-anchor="middle" font-size="18" font-weight="800" fill="#15803d">Payment</text>
+
+        <!-- ── Rate ∩ Booking overlap ── -->
+        <text x="380" y="158" text-anchor="middle" font-size="12" font-weight="700" fill="#4338ca">Price flows here</text>
+        <text x="380" y="175" text-anchor="middle" font-size="11" fill="#4338ca">User picks courier</text>
+        <text x="380" y="190" text-anchor="middle" font-size="11" fill="#4338ca">&amp; confirms price</text>
+
+        <!-- ── Booking ∩ Wallet overlap ── -->
+        <text x="500" y="302" text-anchor="middle" font-size="12" font-weight="700" fill="#0f766e">Balance check</text>
+        <text x="500" y="318" text-anchor="middle" font-size="11" fill="#0f766e">Enough funds?</text>
+        <text x="500" y="334" text-anchor="middle" font-size="11" fill="#0f766e">Then deduct</text>
+
+        <!-- ── CENTER ── -->
+        <text x="390" y="262" text-anchor="middle" font-size="14" font-weight="800" fill="#b45309">₹ Amount</text>
+        <text x="390" y="278" text-anchor="middle" font-size="10.5" fill="#92400e">the same value</text>
+        <text x="390" y="292" text-anchor="middle" font-size="10.5" fill="#92400e">through all 3 steps</text>
+
+      </svg>
+    </div>
+
+    <div class="venn-legend">
+      <div class="vl-item"><div class="vl-dot" style="background:#93c5fd;"></div>Price Calculator</div>
+      <div class="vl-item"><div class="vl-dot" style="background:#c4b5fd;"></div>Shipment Booking</div>
+      <div class="vl-item"><div class="vl-dot" style="background:#86efac;"></div>Wallet Payment</div>
+      <div class="vl-item"><div class="vl-dot" style="background:#fcd34d;"></div>₹ Price (shared by all 3)</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════
+     SECTION 3 — WHAT CAN GO WRONG
+════════════════════════════════════════ -->
+<div class="table-section">
+  <div class="section-title">What Happens If Something Goes Wrong</div>
+  <table class="fail-table">
+    <thead>
+      <tr>
+        <th>Situation</th>
+        <th>What the user sees</th>
+        <th>Is wallet charged?</th>
+        <th>What to do next</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="status-dot sd-red"></span>User is not logged in</td>
+        <td>"Please log in to continue"</td>
+        <td>No</td>
+        <td>Log in and try again</td>
+      </tr>
+      <tr>
+        <td><span class="status-dot sd-red"></span>KYC not verified</td>
+        <td>"Complete identity verification before booking"</td>
+        <td>No</td>
+        <td>Upload Aadhaar / PAN / GST and wait for approval</td>
+      </tr>
+      <tr>
+        <td><span class="status-dot sd-orange"></span>Wallet balance too low</td>
+        <td>"Insufficient balance. Please recharge your wallet."</td>
+        <td>No</td>
+        <td>Recharge wallet with at least the shipping amount</td>
+      </tr>
+      <tr>
+        <td><span class="status-dot sd-red"></span>Courier system error</td>
+        <td>"Booking failed. Please try again."</td>
+        <td>No — wallet is safe</td>
+        <td>Try again or contact AeroTrek support</td>
+      </tr>
+      <tr>
+        <td><span class="status-dot sd-green"></span>Everything goes well</td>
+        <td>Tracking number + label PDF delivered</td>
+        <td>Yes — exact price deducted</td>
+        <td>Nothing — shipment is confirmed!</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
+<!-- ════════════════════════════════════════
+     SHIPROCKET NOTE
+════════════════════════════════════════ -->
+<div class="note-banner">
+  <div class="note-icon">⚠️</div>
+  <div class="note-body">
+    <h3>Note — This Flow May Change After Shiprocket Integration</h3>
+    <p>Currently AeroTrek connects directly to couriers (DHL, FedEx, Aramex, UPS, etc.) through the Overseas API. Once <strong>Shiprocket</strong> is integrated, some parts of this flow will be updated:</p>
+    <ul>
+      <li>Price calculation may pull rates from Shiprocket instead of AeroTrek's own rate tables</li>
+      <li>Shipment creation will go through Shiprocket's system, not directly to the courier</li>
+      <li>Tracking numbers and labels will be generated by Shiprocket</li>
+      <li>The wallet deduction logic and balance check will remain the same</li>
+      <li>An updated diagram will be provided once Shiprocket is live</li>
+    </ul>
+  </div>
+</div>
+
+
+<footer>
+  AeroTrek Logistics Platform &nbsp;·&nbsp; Internal Flow Document &nbsp;·&nbsp; Confidential
+</footer>
+
+</body>
+</html>
